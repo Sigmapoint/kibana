@@ -19,6 +19,7 @@ function (Settings) {
      * @type {String}
      */
     elasticsearch: "http://"+window.location.hostname+":9200",
+    base64_token: undefined,
 
     /**
      * The default ES index to use for storing Kibana specific object

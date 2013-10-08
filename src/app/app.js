@@ -6,6 +6,7 @@ define([
   'jquery',
   'underscore',
   'require',
+  'config',
 
   'elasticjs',
   'bootstrap',
@@ -14,9 +15,8 @@ define([
   'angular-dragdrop',
   'extend-jquery'
 ],
-function (angular, $, _, appLevelRequire) {
+function (angular, $, _, appLevelRequire, config) {
   "use strict";
-
   var app = angular.module('kibana', []),
     // we will keep a reference to each module defined before boot, so that we can
     // go back and allow it to define new features later. Once we boot, this will be false
@@ -58,7 +58,7 @@ function (angular, $, _, appLevelRequire) {
     }
   };
 
-  app.config(function ($routeProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) {
+  app.config(function ($routeProvider, $httpProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) {
     $routeProvider
       .when('/dashboard', {
         templateUrl: 'app/partials/dashboard.html',
@@ -78,6 +78,10 @@ function (angular, $, _, appLevelRequire) {
     register_fns.factory    = $provide.factory;
     register_fns.service    = $provide.service;
     register_fns.filter     = $filterProvider.register;
+    // dirty hack but what the hell
+    if (config.base64_token) {
+      $httpProvider.defaults.headers.common['Authorization'] = "Basic " + config.base64_token;
+    }
   });
 
   var apps_deps = [
